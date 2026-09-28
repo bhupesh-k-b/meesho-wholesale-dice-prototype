@@ -14,12 +14,13 @@ export type Pool = {
   offerPaid?: number; offerLocked?: boolean; extensionEndDay?: number;
   art: string; tint: string; note?: string; refundTotal?: number;
 };
-export type Quote = { id: string; supplier: string; city: string; unitPrice: number; shipping: number; lead: string; delivery: string; fit: string; quality: string; reliability: string; capacity: number; validity: string; status?: 'awarded' | 'expired' };
+export type SampleReview = { amount: number; supplier: string; agreedSpec: string; status: 'paid' | 'refund-requested' | 'replacement-requested' | 'replacement-approved' | 'credited' };
+export type Quote = { id: string; supplier: string; city: string; unitPrice: number; shipping: number; lead: string; delivery: string; fit: string; quality: string; reliability: string; capacity: number; validity: string; status?: 'awarded' | 'expired'; sampleReview?: SampleReview };
 export type RFQ = { id: string; title: string; category: string; qty: number; material: string; dimensions: string; logo: string; colours: string; budget: string; city: string; needed: string; quality: string; status: 'draft' | 'published' | 'quoted' | 'awarded' | 'paid' | 'fulfilment' | 'completed'; quotes: Quote[]; buyer: string; awardedQuoteId?: string; createdAt: string };
-export type Order = { id: string; kind: 'direct' | 'pool' | 'rfq'; title: string; qty: number; unitPrice: number; shipping: number; total: number; seller: string; buyer: string; status: string; createdAt: string; poolId?: string; rfqId?: string; quoteId?: string; issueAllowed?: boolean };
+export type Order = { id: string; kind: 'direct' | 'pool' | 'rfq'; title: string; qty: number; unitPrice: number; shipping: number; total: number; sampleCredit?: number; seller: string; buyer: string; status: string; createdAt: string; poolId?: string; rfqId?: string; quoteId?: string; issueAllowed?: boolean };
 export type Claim = { id: string; orderId: string; title: string; reason: string; qty: number; details: string; status: 'Submitted' | 'Seller reviewing' | 'Replacement agreed' | 'Refund approved' | 'Closed'; response?: string };
 export type Notice = { id: string; title: string; body: string; type: 'pool' | 'rfq' | 'order' | 'claim'; read?: boolean };
-export type DemoData = { loggedIn: boolean; role: Role | null; products: Product[]; pools: Pool[]; rfqs: RFQ[]; orders: Order[]; claims: Claim[]; notices: Notice[]; activePoolId: string; simDay: number; optionalRevenue: number; buyerInterest: Record<string, number>; poolDecisions: Record<string, 'buy'|'extend'|'cancel'>; };
+export type DemoData = { loggedIn: boolean; role: Role | null; products: Product[]; pools: Pool[]; rfqs: RFQ[]; orders: Order[]; claims: Claim[]; notices: Notice[]; activePoolId: string; simDay: number; optionalRevenue: number; revenueModelVersion: number; buyerInterest: Record<string, number>; poolDecisions: Record<string, 'buy'|'extend'|'cancel'>; };
 
 export const seedProducts: Product[] = [
   { id:'p-tote', name:'Reusable cotton tote bags', category:'Bags & Packaging', seller:'Sundar Textiles', sellerCity:'Surat', min:50, max:1000, stock:1000, tiers:[{min:50,price:82},{min:200,price:72},{min:500,price:64}], shipping:250, dispatch:'Dispatch in 3–5 days', delivery:'Delivers to Chennai, Bengaluru and most major cities', quality:'220 GSM cotton canvas · double-stitched handles · pre-shrunk', specs:['Natural cotton canvas','38 × 42 cm, gusseted base','Screen print area: 25 × 28 cm','Sample available before production'], returns:'Bulk change-of-mind returns are unavailable. Wrong, damaged, missing or materially nonconforming units may be claimed within 5 days of delivery; affected units can be replaced or refunded.', art:'shopping-bag', tint:'sand' },
@@ -43,9 +44,9 @@ export function seedData(): DemoData {
     ],
     rfqs:[{
       id:'rfq-school',title:'Custom school gift bags',category:'Bags & Packaging',qty:500,material:'Recycled cotton canvas, 240 GSM',dimensions:'30 × 35 × 8 cm',logo:'One-colour school logo, front centre',colours:'Royal blue body, white handles',budget:'₹95–₹145 per delivered unit',city:'Chennai, Tamil Nadu',needed:'Deliver by 20 Oct 2026',quality:'Pre-production sample for approval; colour fastness and reinforced seams required',status:'quoted',buyer:'Bhupesh Stores',createdAt:'Today',quotes:[
-        {id:'q1',supplier:'Sundar Textiles',city:'Surat',unitPrice:124,shipping:0,lead:'12 days',delivery:'18 Oct',fit:'Exact fabric, size and print match',quality:'Sample included · colour test report',reliability:'4.8/5 · 96% on-time',capacity:800,validity:'Valid 5 days'},
-        {id:'q2',supplier:'Aruna Wholesale',city:'Tiruppur',unitPrice:108,shipping:3500,lead:'18 days',delivery:'24 Oct',fit:'Logo print included; 220 GSM fabric',quality:'Sample ₹400, credited on order',reliability:'4.5/5 · 89% on-time',capacity:600,validity:'Valid 3 days'},
-        {id:'q3',supplier:'Metro Supply House',city:'Coimbatore',unitPrice:138,shipping:0,lead:'9 days',delivery:'15 Oct',fit:'Exact spec, premium recycled canvas',quality:'Pre-production sample included',reliability:'4.9/5 · 98% on-time',capacity:500,validity:'Valid 7 days'}
+        {id:'q1',supplier:'Sundar Textiles',city:'Surat',unitPrice:124,shipping:0,lead:'12 days',delivery:'18 Oct',fit:'Exact fabric, size and print match',quality:'Sample included · colour test report',reliability:'4.8/5 · 96% on-time (illustrative demo data)',capacity:800,validity:'Valid 5 days'},
+        {id:'q2',supplier:'Aruna Wholesale',city:'Tiruppur',unitPrice:108,shipping:3500,lead:'18 days',delivery:'24 Oct',fit:'Logo print included; 220 GSM fabric',quality:'Sample ₹400, credited on order',reliability:'4.5/5 · 89% on-time (illustrative demo data)',capacity:600,validity:'Valid 3 days'},
+        {id:'q3',supplier:'Metro Supply House',city:'Coimbatore',unitPrice:138,shipping:0,lead:'9 days',delivery:'15 Oct',fit:'Exact spec, premium recycled canvas',quality:'Pre-production sample included',reliability:'4.9/5 · 98% on-time (illustrative demo data)',capacity:500,validity:'Valid 7 days'}
       ]
     }],
     orders:[
@@ -62,7 +63,7 @@ export function seedData(): DemoData {
       {id:'n1',title:'A pool decision is due tomorrow',body:'Printed cotton drawstring bags: 187 of 200 units are paid. Review the seller’s offer before Day 7.',type:'pool'},
       {id:'n2',title:'3 supplier quotes are ready',body:'Compare delivered price, sample terms and delivery dates for your 500 custom school gift bags.',type:'rfq'},
       {id:'n3',title:'Order MW-2201 is confirmed',body:'Sundar Textiles is preparing your 100-unit tote bag order.',type:'order'}
-    ], activePoolId:'pool-open', simDay:4, optionalRevenue:0, buyerInterest:{'pool-open':20,'pool-extension':20,'pool-reprice':20}, poolDecisions:{}
+    ], activePoolId:'pool-open', simDay:4, optionalRevenue:0, revenueModelVersion:2, buyerInterest:{'pool-open':20,'pool-extension':20,'pool-reprice':20}, poolDecisions:{}
   };
 }
 

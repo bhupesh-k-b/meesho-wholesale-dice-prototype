@@ -67,3 +67,22 @@
 .role-chip{height:44px;min-height:44px}
 .search-box .search-action{width:44px;height:44px;flex-basis:44px}
 .section-head button,.card-title button,.promo-card button,.about-link,.filter-row button,.filter-row select,.offer-inline button,.your-interest button,.bucket-actions .btn,.scenario-tools .btn,.checkout-product button,.address-heading button,.order-tabs button,.order-actions .btn,.manage-actions .btn{min-height:44px}
+
+.commitment-line{display:block;margin:0 9px;color:#5e5c69;font-size:10px;line-height:1.35}
+.free-essentials{display:grid;gap:8px;padding:12px;border:1px solid #dcebe4;border-radius:10px;background:#f7fbf9}
+.free-essentials>div{display:flex;align-items:flex-start;gap:8px;color:#5f606a;font-size:11px;line-height:1.4}
+.free-essentials svg{width:15px;height:15px;flex:0 0 15px;margin-top:1px;color:var(--green)}
+.service-card{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;display:flex;flex-direction:column;gap:9px}
+.service-card-heading{display:flex;align-items:center;gap:8px}
+.service-card-heading>svg{color:var(--magenta);width:19px;height:19px;flex:0 0 19px}
+.service-card-heading>div{display:flex;flex-direction:column;gap:3px}
+.service-card-heading b{font-size:12px}
+.service-card-heading span{font-size:10px;color:var(--muted)}
+.service-card>p{margin:0;color:var(--muted);font-size:10px;line-height:1.45}
+.sample-review .plain-note{margin:0}
+.sample-credit-row{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line);color:#08785a;font-size:11px}
+.sample-credit-row b{white-space:nowrap}
+.service-buy small{grid-column:1/-1;color:var(--muted);font-size:10px;line-height:1.4}
+.service-option{flex-wrap:wrap}
+.service-option .btn{flex:1 0 100%}
+.service-option>div{min-width:0}
